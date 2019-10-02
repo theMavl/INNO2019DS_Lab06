@@ -77,7 +77,8 @@ class ClientListener(Thread):
 def main():
     next_name = 1
 
-    os.mkdir("dl")
+    if not os.path.exists("dl"):
+        os.mkdir("dl")
 
     # AF_INET – IPv4, SOCK_STREAM – TCP
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
