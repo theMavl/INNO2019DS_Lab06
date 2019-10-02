@@ -1,6 +1,9 @@
 import socket
 import os
 import sys
+import time
+
+t_sleep = 0.1
 
 
 def main():
@@ -29,7 +32,8 @@ def main():
         while buff:
             sock.send(buff)
             c += 1024
-            print("\rSending... ({} %)".format(int(c * 100 / size)), end='')
+            print("\rSending... ({}%, ETA {}s)".format(int(c * 100 / size), int((size-c) / (1024 / t_sleep))), end='')
+            time.sleep(t_sleep)
             buff = fp.read(1024)
 
         answer = sock.recv(1)  # Wait for OK signal

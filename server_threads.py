@@ -19,6 +19,7 @@ class ClientListener(Thread):
         print(self.name + ' disconnected')
 
     def run(self):
+        aborted = False
         while True:
             # try to read 1024 bytes from user
             # this is blocking call, thread will be paused here
@@ -51,17 +52,20 @@ class ClientListener(Thread):
                     while True:
                         data = self.sock.recv(1024)
                         if not data:
+                            print("Transmission aborted")
                             break
 
                         new_file.write(data)
                         c += 1024
 
                         if c >= file_size:
-                            print("Transmission over")
+                            print("File transmitted")
                             break
-
-
-                self.sock.send(bytes([1]))  # Send OK signal
+                if aborted:
+                    os.remove(target_path)
+                    self._close()
+                else:
+                    self.sock.send(bytes([1]))  # Send OK signal
 
             else:
                 # if we got no data – client has disconnected
