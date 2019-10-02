@@ -24,10 +24,10 @@ class ClientListener(Thread):
             # this is blocking call, thread will be paused here
             data = self.sock.recv(1024)
             if data:
-                print(data)
                 try:
                     header = data.decode("utf-8").split(';')
                 except Exception:
+                    print(data)
                     self._close()
                     return
 
@@ -47,12 +47,19 @@ class ClientListener(Thread):
                     c += 1
 
                 with open(target_path, 'ab') as new_file:
-                    for i in range(0, file_size, 1024):
+                    c = 0
+                    while True:
                         data = self.sock.recv(1024)
                         if not data:
                             break
-                        else:
-                            new_file.write(data)
+
+                        new_file.write(data)
+                        c += 1024
+
+                        if c >= file_size:
+                            print("Transmission over")
+                            break
+
 
                 self.sock.send(bytes([1]))  # Send OK signal
 
