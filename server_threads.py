@@ -24,7 +24,12 @@ class ClientListener(Thread):
             # this is blocking call, thread will be paused here
             data = self.sock.recv(1024)
             if data:
-                header = data.decode("utf-8").split(';')
+                print(data)
+                try:
+                    header = data.decode("utf-8").split(';')
+                except Exception:
+                    self._close()
+                    return
 
                 if header[0] == "FILE":
                     print("User sends file {} ({} bytes)".format(header[1], header[2]))
