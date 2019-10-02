@@ -56,7 +56,7 @@ class ClientListener(Thread):
                             break
 
                         new_file.write(data)
-                        c += 1024
+                        c += len(data)
 
                         if c >= file_size:
                             print("File transmitted")
@@ -76,6 +76,8 @@ class ClientListener(Thread):
 
 def main():
     next_name = 1
+
+    os.mkdir("dl")
 
     # AF_INET – IPv4, SOCK_STREAM – TCP
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

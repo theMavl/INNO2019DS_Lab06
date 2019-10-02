@@ -3,7 +3,7 @@ import os
 import sys
 import time
 
-t_sleep = 0.1
+t_sleep = 0.001
 
 
 def main():
